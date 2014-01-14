@@ -228,4 +228,9 @@ class SyslogIO
 	def noop(*args)
 	end
 	alias_method :reopen, :noop
+
+	# false
+	def isatty
+		false
+	end
 end
