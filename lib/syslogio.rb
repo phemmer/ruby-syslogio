@@ -127,9 +127,12 @@ class SyslogIO
 	end
 	alias_method :<<, :write
 
-	# Write to syslog directly bypassing buffering if enabled.
+	# Write to syslog directly, bypassing buffering if enabled.
 	def syswrite(text)
-		@out.syswrite(text) if @out
+		begin
+			@out.syswrite(text) if @out and !@out.closed?
+		rescue SystemCallError => e
+		end
 
 		text.split(/\n/).each do |line|
 			@subs.each do |sub|
